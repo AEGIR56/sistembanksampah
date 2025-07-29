@@ -3,7 +3,7 @@
 
     <div class="offcanvas-body d-flex flex-column bg-dark text-white p-0" style="height: 100vh; width: 100%;">
         <!-- Header & Logo -->
-        <div class="p-3 text-center">
+        <div class="p-3 text-center" href="{{ route('admin.dashboard') }}">
             <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-fluid logo-img" style="max-height: 60px;">
         </div>
 

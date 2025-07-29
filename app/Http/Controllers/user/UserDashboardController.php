@@ -33,7 +33,7 @@ class UserDashboardController extends Controller
             ->where('status_laporan', 'selesai')
             ->sum('berat_staff');
 
-        $achievement = '-';
+        $achievement = 0;
 
         //  Total Deposit dari pickup yang statusnya selesai
         $total_deposit_points = DB::table('report_pickups')
@@ -92,16 +92,6 @@ class UserDashboardController extends Controller
         ));
 
     }
-    public function getData(Request $request)
-    {
-        $wasteTypes = WasteType::query();
-        return DataTables::of($wasteTypes)
-            ->addIndexColumn()
-            ->editColumn('points_per_kg', function ($row) {
-                return number_format($row->points_per_kg, ); // ← pakai ini
-            })
-            ->make(true);
-    }
 
     public function profile()
     {
@@ -111,6 +101,17 @@ class UserDashboardController extends Controller
     public function schedule()
     {
         return view('user.schedule');
+    }
+
+    public function getData(Request $request)
+    {
+        $wasteTypes = WasteType::query();
+        return DataTables::of($wasteTypes)
+            ->addIndexColumn()
+            ->editColumn('points_per_kg', function ($row) {
+                return number_format($row->points_per_kg, ); // ← pakai ini
+            })
+            ->make(true);
     }
 
     public function transaction()
@@ -134,7 +135,7 @@ class UserDashboardController extends Controller
             ->sum('report_pickups.berat_staff');
 
 
-        $achievement = '-';
+        $achievement = 0;
 
         //  Total Deposit dari pickup yang statusnya selesai
         $total_deposit_points = DB::table('pickups')
@@ -190,52 +191,109 @@ class UserDashboardController extends Controller
             'redeem_history'
         ));
     }
+    public function getDataTracking()
+    {
+        $userId = auth()->id();
+
+        $data = Pickup::with('wasteType')
+            ->where('user_id', $userId)
+            ->get()
+            ->map(function ($pickup) {
+                // Mapping status ke label + warna badge
+                $statusMap = [
+                    'menunggu' => ['label' => 'Menunggu', 'color' => 'secondary'],
+                    'diproses' => ['label' => 'Diproses', 'color' => 'warning'],
+                    'pickup selesai' => ['label' => 'Selesai Dipickup', 'color' => 'primary'],
+                    'ditolak_admin' => ['label' => 'Selesai Dipickup', 'color' => 'primary'], // info tambahan
+                    'pickup ditolak' => ['label' => 'Pickup Ditolak', 'color' => 'danger'],
+                    'selesai' => ['label' => 'Selesai', 'color' => 'success'],
+                ];
+
+                $statusRaw = $pickup->status ?? 'menunggu';
+                $statusInfo = $statusMap[$statusRaw] ?? ['label' => ucfirst($statusRaw), 'color' => 'dark'];
+
+                return [
+                    'id' => $pickup->id,
+                    'created_at' => $pickup->created_at->format('Y-m-d'),
+                    'pickup_time' => $pickup->time_slot,
+                    'pickup_time_badge' => match ($pickup->time_slot) {
+                        'morning' => '<span class="badge bg-primary">Pagi</span>',
+                        'afternoon' => '<span class="badge bg-warning text-dark">Sore</span>',
+                        default => '<span class="badge bg-secondary">-</span>',
+                    },
+                    'waste_type' => optional($pickup->wasteType)->type,
+                    'weight' => number_format($pickup->weight),
+                    'address' => $pickup->address,
+
+                    // Status bagian ini:
+                    'status' => $statusInfo['label'], // raw (untuk search & sort)
+                    'status_raw' => $statusRaw, // tambahan mentah jika butuh
+                    'status_badge' => '<span class="badge bg-' . $statusInfo['color'] . '">' . $statusInfo['label'] . '</span>',
+
+                    'approved_at' => $pickup->approved_at
+                        ? Carbon::parse($pickup->approved_at)->format('Y-m-d H:i')
+                        : '-',
+                    'approval_note' => $pickup->approval_note ?? '-',
+                ];
+            });
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->rawColumns(['status_badge', 'pickup_time_badge']) // <- ini WAJIB
+            ->make(true);
+    }
+
 
     public function pickupData(Request $request)
     {
         $userId = auth()->id();
 
-        $data = DB::table('report_pickups')
-            ->join('pickups', 'report_pickups.pickup_id', '=', 'pickups.id')
-            ->join('waste_types', 'pickups.waste_type_id', '=', 'waste_types.id')
-            ->where('pickups.user_id', $userId)
-            ->where('report_pickups.status_laporan', 'selesai') 
-            ->select(
-                'report_pickups.id',
-                'report_pickups.created_at as date',
-                'waste_types.type as waste_type',
-                'report_pickups.berat_staff as qty',
-                DB::raw('(report_pickups.berat_staff * waste_types.points_per_kg) as nominal')
-            );
+        $data = ReportPickup::with(['pickup.wasteType'])
+            ->whereHas('pickup', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->where('status_laporan', 'selesai')
+            ->get()
+            ->map(function ($row) {
+                $pointsPerKg = optional($row->pickup->wasteType)->points_per_kg ?? 0;
+                return [
+                    'id' => $row->id,
+                    'date' => $row->created_at->format('Y-m-d'),
+                    'waste_type' => optional($row->pickup->wasteType)->type ?? '-',
+                    'qty' => number_format($row->berat_staff),
+                    'nominal' => number_format($row->berat_staff * $pointsPerKg),
+                ];
+            });
 
         return DataTables::of($data)
             ->addIndexColumn()
-            ->editColumn('qty', fn($row) => number_format($row->qty, 2))
-            ->editColumn('nominal', fn($row) => number_format($row->nominal))
             ->make(true);
     }
+
 
 
     public function redeemData(Request $request)
     {
         $userId = auth()->id();
 
-        $data = DB::table('point_shop_transactions')
-            ->join('shop_items', 'point_shop_transactions.shop_item_id', '=', 'shop_items.id')
-            ->where('point_shop_transactions.user_id', $userId)
-            ->select(
-                'point_shop_transactions.id',
-                'point_shop_transactions.created_at as date',
-                'shop_items.name as item_name',
-                'point_shop_transactions.quantity',
-                'point_shop_transactions.point_used'
-            );
+        $data = PointShopTransaction::with('shopItem')
+            ->where('user_id', $userId)
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'id' => $row->id,
+                    'date' => $row->created_at->format('Y-m-d'),
+                    'item_name' => optional($row->shopItem)->name ?? '-',
+                    'quantity' => $row->quantity,
+                    'point_used' => number_format($row->point_used),
+                ];
+            });
 
         return DataTables::of($data)
             ->addIndexColumn()
-            ->editColumn('point_used', fn($row) => number_format($row->point_used))
             ->make(true);
     }
+
 
 
     public function pointExchange()

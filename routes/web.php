@@ -40,6 +40,23 @@ Route::get('/terms', function () {
 Route::get('/policy', function () {
     return view('policy');
 });
+
+Route::get('/help-center', function () {
+    return view('help-center');
+});
+
+Route::get('/home/terms', function () {
+    return view('welcome-terms');
+});
+
+Route::get('/home/policy', function () {
+    return view('welcome-policy');
+});
+
+Route::get('/home/help-center', function () {
+    return view('welcome-help-center');
+});
+
 // Login Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -61,6 +78,7 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'requestReset'
 Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
     ->name('admin.dashboard')
     ->middleware('auth');
+
 Route::middleware(['auth', 'nocache', 'role:admin'])->group(function () {
     // Admin account management
     Route::get('/admin/accounts', [AccountManagementController::class, 'index'])->name('admin.accounts.index');
@@ -70,7 +88,6 @@ Route::middleware(['auth', 'nocache', 'role:admin'])->group(function () {
     Route::put('/admin/accounts/{user}', [AccountManagementController::class, 'update'])->name('admin.accounts.update');
     Route::delete('/admin/accounts/{user}', [AccountManagementController::class, 'destroy'])->name('admin.accounts.destroy');
     Route::get('/admin/accounts/data', [AccountManagementController::class, 'data'])->name('admin.accounts.data');
-
 
     //PasswordReset
     Route::get('/admin/password-requests', [AdminPasswordResetController::class, 'index'])->name('admin.password.requests');
@@ -105,40 +122,32 @@ Route::middleware(['auth', 'nocache', 'role:staff'])->prefix('staff')->group(fun
     // Dashboard staff
     Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('staff.dashboard');
     Route::get('/dashboard/data', [StaffDashboardController::class, 'getData'])->name('staff.dashboard.data');
-
     // Pickup utama (halaman list)
     Route::get('/pickups', [StaffPickupController::class, 'index'])->name('staff.pickups.index');
-
     // Detail pickup (show by id)
     Route::get('/pickups/{id}', [StaffPickupController::class, 'show'])->name('staff.pickups.show');
-
     // Update status pickup
     Route::post('/pickups/{id}/update-status', [StaffPickupController::class, 'updateStatus'])
         ->name('staff.pickups.updateStatus');
-
     // API untuk ambil data pickup (untuk modal laporan)
     Route::get('/api/pickups/{id}', [StaffPickupController::class, 'apiPickupDetail'])->name('staff.pickups.api');
-
     // Simpan laporan pickup (melalui modal)
     Route::post('/pickups/{id}/report', [StaffPickupReportController::class, 'store'])->name('staff.pickups.report');
 });
-
-
 
 //User Dashboard Routes
 Route::middleware(['auth', 'nocache', 'role:user'])->prefix('user')->group(function () {
     // 📊 Dashboard
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/waste-types/data', [UserDashboardController::class, 'getData'])->name('user.waste-types.data');
+    Route::get('/pickup-tracking/data', [UserDashboardController::class, 'getDataTracking'])->name('user.pickup-tracking.data');
+    Route::get('/transactions/pickup', [UserDashboardController::class, 'pickupData'])->name('user.transactions.pickup');
+    Route::get('/transactions/redeem', [UserDashboardController::class, 'redeemData'])->name('user.transactions.redeem');
     // 🗓️ Schedule & Pickup
     Route::get('/schedule', [PickupController::class, 'index'])->name('user.schedule');
     Route::post('/user/schedule/submit', [PickupController::class, 'store'])->name('pickup.submit');
     // 💳 Transaksi
     Route::get('/transaction', [UserDashboardController::class, 'transaction'])->name('user.transaction');
-    // routes/web.php
-    Route::get('/transactions/pickup', [UserDashboardController::class, 'pickupData'])->name('user.transactions.pickup');
-    Route::get('/transactions/redeem', [UserDashboardController::class, 'redeemData'])->name('user.transactions.redeem');
-
     // 🪙 Poin Exchange
     Route::get('/pointexchange', [PointExchangeController::class, 'index'])->name('user.pointExchange');
     Route::post('/pointexchange', [PointExchangeController::class, 'exchange'])->name('user.pointExchange.exchange');

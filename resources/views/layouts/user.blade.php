@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWOB | User Page</title>
+    <title>AWAB | User Page</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Favicon --}}
@@ -50,7 +50,7 @@
                     <div class="row text-muted">
                         <div class="col-12 col-md-6 text-start">
                             <p class="mb-0 small">
-                                <span class="fw-semibold text-success">AWOB Admin Panel</span> &copy;
+                                <span class="fw-semibold text-success">AWAB Admin Panel</span> &copy;
                                 {{ date('Y') }}. All rights reserved.
                             </p>
                         </div>
@@ -64,14 +64,22 @@
                                         </li>
                                     @endforeach
                                 @else
-                                    <li class="list-inline-item me-2"><a href="#"
-                                            class="text-success text-decoration-none">Support</a></li>
-                                    <li class="list-inline-item me-2"><a href="#"
-                                            class="text-success text-decoration-none">Help Center</a></li>
-                                    <li class="list-inline-item me-2"><a href="#"
-                                            class="text-success text-decoration-none">Privacy</a></li>
-                                    <li class="list-inline-item me-2"><a href="#"
-                                            class="text-success text-decoration-none">Terms</a></li>
+                                    <li class="list-inline-item me-2">
+                                        <a href="{{ url('https://api.whatsapp.com/send/?phone=6282223199323&text&type=phone_number&app_absent=0') }}"
+                                            class="text-success text-decoration-none" target="_blank">Hubungi Kami</a>
+                                    </li>
+                                    <li class="list-inline-item me-2">
+                                        <a href="{{ url('/help-center') }}"
+                                            class="text-success text-decoration-none">Help Center</a>
+                                    </li>
+                                    <li class="list-inline-item me-2">
+                                        <a href="{{ url('/policy') }}"
+                                            class="text-success text-decoration-none">Privacy</a>
+                                    </li>
+                                    <li class="list-inline-item me-2">
+                                        <a href="{{ url('/terms') }}"
+                                            class="text-success text-decoration-none">Terms</a>
+                                    </li>
                                 @endif
                             </ul>
                         </div>

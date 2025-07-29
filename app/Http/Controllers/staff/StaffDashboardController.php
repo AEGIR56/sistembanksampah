@@ -34,7 +34,7 @@ class StaffDashboardController extends Controller
                     default => '<span class="badge bg-secondary">-</span>',
                 };
             })
-            ->addColumn('status', fn($p) => ucfirst(str_replace('_', ' ', $p->status)))
+            ->addColumn('status', fn($p) => ucfirst(str_replace('_', ' ', $p->status ?? 'menunggu')))
             ->rawColumns(['time_slot_label'])
             ->make(true);
     }

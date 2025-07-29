@@ -10,16 +10,20 @@ class Pickup extends Model
     use HasFactory;
 
     protected $fillable = [
-        'username',
         'user_id',
+        'staff_id',
+        'admin_id',
+        'approved_at',
+        'approval_note',
+        'username',
         'pickup_date',
         'time_slot',
         'address',
         'waste_type_id',
         'weight',
         'status',
-        'staff_id',
     ];
+    public $timestamps = true;
 
     public const STATUS_PENDING = 'menunggu';
     public const STATUS_PROCESSING = 'diproses';
@@ -41,7 +45,7 @@ class Pickup extends Model
     {
         return $this->hasOne(ReportPickup::class);
     }
-    
+
     public function wasteType()
     {
         return $this->belongsTo(WasteType::class, 'waste_type_id');

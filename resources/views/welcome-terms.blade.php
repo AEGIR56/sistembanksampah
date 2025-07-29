@@ -1,6 +1,7 @@
-@extends('layouts.support')
+@extends('layouts.app')
 
 @section('content')
+    @include('partials.navbar')
     <div class="container my-5">
         <div class="text-center mb-5">
             <img src="{{ asset('images/logo.png') }}" alt="AWOB Logo" style="height: 50px;">

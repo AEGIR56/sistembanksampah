@@ -91,12 +91,19 @@
     </style>
 
     <div class="container py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}" class="text-success text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Toko</li>
+            </ol>
+        </nav>
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="fw-bold">Toko Penukaran Poin</h1>
             <a href="{{ route('user.cart') }}" class="btn btn-outline-success btn-lg position-relative">
                 <i class="bi bi-cart me-2"> </i>KeranjangKu
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-badge"
-                    style="display: none;">0</span>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                    id="cart-badge" style="display: none;">0</span>
             </a>
         </div>
 

@@ -75,7 +75,8 @@
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password" id="password" class="form-control" required placeholder="Masukkan Password...">
+                            <input type="password" name="password" id="password" class="form-control" required
+                                placeholder="Masukkan Password...">
                         </div>
 
                         @if ($errors->has('loginError'))
@@ -108,10 +109,57 @@
     </div>
 @endsection
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.getElementById('login-btn').addEventListener('click', function() {
             document.getElementById('spinner').classList.remove('d-none');
             document.getElementById('btn-text').textContent = 'Logging in...';
         });
+
+        // Cek session error
+        @if (session('error'))
+            let errorMessage = "{{ session('error') }}";
+            let errorIcon = 'error';
+            let errorTitle = 'Login Gagal';
+
+            // Custom berdasarkan isi pesan
+            switch (errorMessage) {
+                case 'Pengguna tidak ditemukan.':
+                    errorTitle = 'Akun Tidak Ditemukan';
+                    break;
+                case 'Password yang Anda masukkan salah.':
+                    errorTitle = 'Password Salah';
+                    break;
+                case 'An error occurred. Please try again later.':
+                    errorTitle = 'Kesalahan Server';
+                    errorIcon = 'warning';
+                    break;
+                case 'Invalid credentials.':
+                    errorTitle = 'Login Gagal';
+                    break;
+            }
+
+            Swal.fire({
+                icon: errorIcon,
+                title: errorTitle,
+                text: errorMessage,
+                confirmButtonColor: '#d33'
+            });
+        @endif
+
+        // Validasi gagal dari Laravel
+        @if ($errors->any())
+            let errorMessages = '';
+            @foreach ($errors->all() as $error)
+                errorMessages += `• {{ $error }}\n`;
+            @endforeach
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validasi Gagal',
+                text: errorMessages,
+                confirmButtonColor: '#f59e0b'
+            });
+        @endif
     </script>
 @endpush

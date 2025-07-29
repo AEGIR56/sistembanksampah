@@ -387,7 +387,7 @@
                         <!-- Kolom 3 -->
                         <div class="col-lg-3 col-12 mb-4">
                             <div class="mb-3 pb-2 d-flex justify-content-between border-bottom border-bottom-lg-0">
-                                <h4 class="text-white">Legal</h4>
+                                <h4 class="text-white">Support</h4>
                                 <a class="d-block d-lg-none text-white" data-bs-toggle="collapse"
                                     href="#collapseLandingLegal" role="button" aria-expanded="false"
                                     aria-controls="collapseLanding">
@@ -396,12 +396,20 @@
                             </div>
                             <div class="collapse d-lg-block" id="collapseLandingLegal" data-bs-parent="#ft-links">
                                 <ul class="list-unstyled mb-0 py-3 py-lg-0">
-                                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Syarat &
-                                            Ketentuan</a></li>
-                                    <li class="mb-2"><a href="#"
-                                            class="text-white text-decoration-none">Kebijakan
-                                            Privasi</a></li>
-                                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">FAQ</a>
+                                    <li class="mb-2">
+                                        <a href="{{ url('/home/terms') }}" class="text-white text-decoration-none">
+                                            Syarat & Ketentuan
+                                        </a>
+                                    </li>
+                                    <li class="mb-2">
+                                        <a href="{{ url('/home/policy') }}" class="text-white text-decoration-none">
+                                            Kebijakan Privasi
+                                        </a>
+                                    </li>
+                                    <li class="mb-2">
+                                        <a href="{{ url('/home/help-center') }}" class="text-white text-decoration-none">
+                                            FAQ
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -485,7 +493,7 @@
         </div>
     </footer>
     <!-- Scroll to Top Button -->
-    <a href="#" id="scrollTopBtn" class="btn btn-success  position-fixed rounded shadow"
+    <a href="#" id="scrollBtn" class="btn btn-success  position-fixed rounded shadow"
         style="bottom: 20px; right: 20px; z-index: 999; display: none;">
         <i class="bi bi-arrow-up"></i>
     </a>

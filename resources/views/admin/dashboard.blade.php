@@ -193,10 +193,10 @@
 
         <!-- Modal Pickup -->
         <div class="modal fade" id="pickupModal" tabindex="-1" aria-labelledby="pickupModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Pickup Menunggu Persetujuan</h5>
+                        <h5 class="modal-title fw-bold">Pickup Menunggu Persetujuan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -207,11 +207,13 @@
                                 <table class="table table-bordered table-hover align-middle">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>User</th>
+                                            <th>No.</th>
+                                            <th>Nama User</th>
+                                            <th>Nama Staff</th>
                                             <th>Tanggal</th>
+                                            <th>Berat User</th>
                                             <th>Berat Staff</th>
                                             <th>Jenis</th>
-                                            <th>Status</th>
                                             <th>Poin</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -219,26 +221,36 @@
                                     <tbody>
                                         @foreach ($pickups as $pickup)
                                             <tr>
+                                                <td>{{ isset($loop) ? $loop->iteration : $loop_index + 1 }}.</td>
                                                 <td>{{ $pickup->pickup->user->username ?? '-' }}</td>
-                                                <td>{{ $pickup->pickup_date }}</td>
-                                                <td>{{ $pickup->report->berat_staff ?? '-' }} kg</td>
-                                                <td>{{ $pickup->wasteType->type ?? '-' }}</td>
-                                                <td>{{ ucfirst($pickup->status) }}</td>
+                                                <td>{{ $pickup->pickup->staff->username ?? '-' }}</td>
+                                                <td>{{ $pickup->pickup->pickup_date }}</td>
+                                                <td>{{ $pickup->pickup->weight ?? '-' }} kg</td>
+                                                <td>{{ $pickup->berat_staff ?? '-' }} kg</td>
+                                                <td>{{ $pickup->pickup->wasteType->type ?? '-' }}</td>
                                                 <td class="text-center">
-                                                    {{ $pickup->report ? floor($pickup->report->berat_staff * ($pickup->wasteType->points_per_kg ?? 0)) : 0 }}
+                                                    {{ $pickup->berat_staff && $pickup->pickup->wasteType
+                                                        ? number_format($pickup->berat_staff * $pickup->pickup->wasteType->points_per_kg,0)
+                                                        : 0 }}
                                                 </td>
-                                                <td>
+                                                <td class="text-nowrap">
                                                     <form action="{{ route('admin.pickup.reject', $pickup->id) }}"
-                                                        method="POST" class="d-inline">
+                                                        method="POST" class="d-inline-flex align-items-center mb-1"
+                                                        style="gap: 4px;">
                                                         @csrf
                                                         <input type="text" name="note" placeholder="Alasan" required
-                                                            class="form-control form-control-sm mb-2">
-                                                        <button class="btn btn-sm btn-danger">Tolak</button>
+                                                            class="form-control form-control-sm" style="width: 140px;">
+                                                        <button class="btn btn-sm btn-danger" type="submit">Tolak</button>
                                                     </form>
+
                                                     <form action="{{ route('admin.pickup.approve', $pickup->id) }}"
-                                                        method="POST" class="d-inline">
+                                                        method="POST" class="d-inline-flex align-items-center"
+                                                        style="gap: 4px;">
                                                         @csrf
-                                                        <button class="btn btn-sm btn-success">Setujui</button>
+                                                        <input type="text" name="note" placeholder="Catatan"
+                                                            class="form-control form-control-sm" style="width: 140px;">
+                                                        <button class="btn btn-sm btn-success"
+                                                            type="submit">Setujui</button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -253,10 +265,10 @@
         </div>
         <!-- Modal Reset Password -->
         <div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Permintaan Reset Password</h5>
+                        <h5 class="modal-title fw-bold">Permintaan Reset Password</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -267,7 +279,7 @@
                                 <table class="table table-striped table-bordered align-middle">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>#</th>
+                                            <th>No.</th>
                                             <th>User</th>
                                             <th>Email</th>
                                             <th>Waktu</th>
@@ -301,64 +313,6 @@
                 </div>
             </div>
         </div>
-        {{-- Approval Section --}}
-        <hr class="my-5">
-        <h5 class="fw-bold mb-3">Pickup Menunggu Persetujuan Admin</h5>
-
-        @if ($pickups->isEmpty())
-            <p class="text-muted">Tidak ada pickup yang menunggu approval.</p>
-        @else
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>User</th>
-                            <th>Tanggal</th>
-                            <th>Berat User</th>
-                            <th>Berat Staff</th>
-                            <th>Jenis</th>
-                            <th>Status</th>
-                            <th>Poin</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($pickups as $pickup)
-                            <tr>
-                                <td>{{ $pickup->pickup->user->username ?? '-' }}</td>
-                                <td>{{ $pickup->pickup->pickup_date }}</td>
-                                <td>{{ $pickup->pickup->weight ?? '-' }} kg</td>
-                                <td>{{ $pickup->berat_staff ?? '-' }} kg</td>
-                                <td>{{ $pickup->pickup->wasteType->type ?? '-' }}</td>
-                                <td>{{ ucfirst($pickup->pickup->status) }}</td>
-                                <td class="text-center">
-                                    {{ $pickup->berat_staff && $pickup->pickup->wasteType
-                                        ? floor($pickup->berat_staff * $pickup->pickup->wasteType->points_per_kg)
-                                        : 0 }}
-                                </td>
-                                <td class="text-nowrap">
-                                    <form action="{{ route('admin.pickup.reject', $pickup->id) }}" method="POST"
-                                        class="d-inline-flex align-items-center mb-1" style="gap: 4px;">
-                                        @csrf
-                                        <input type="text" name="note" placeholder="Alasan" required
-                                            class="form-control form-control-sm" style="width: 140px;">
-                                        <button class="btn btn-sm btn-danger" type="submit">Tolak</button>
-                                    </form>
-
-                                    <form action="{{ route('admin.pickup.approve', $pickup->id) }}" method="POST"
-                                        class="d-inline-flex align-items-center" style="gap: 4px;">
-                                        @csrf
-                                        <input type="text" name="note" placeholder="Catatan"
-                                            class="form-control form-control-sm" style="width: 140px;">
-                                        <button class="btn btn-sm btn-success" type="submit">Setujui</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
 
     @endsection
     @push('scripts')

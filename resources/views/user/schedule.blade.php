@@ -109,6 +109,12 @@
     </style>
 
     <div class="container py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}" class="text-success text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Schedule Management</li>
+            </ol>
+        </nav>
         <div class="container-fluid ">
             <h1 class="fw-bold mb-4 text-center">Schedule Management</h1>
             <h5 id="customDateTitle" class="mb-3 text-success text-center"></h5>

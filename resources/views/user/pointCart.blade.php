@@ -2,8 +2,16 @@
 
 @section('content')
     <div class="container py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}" class="text-success text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('user.pointExchange.exchange') }}" class="text-success text-decoration-none">Toko</a></li>
+                <li class="breadcrumb-item active" aria-current="page">KeranjangKu</li>
+            </ol>
+        </nav>
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="fw-bold">KeranjangKu</h1>
+            <h4 class="mb-4">Poin Anda: <strong>{{ number_format($totalPoints, 0, 0) }}</strong></h4>
         </div>
 
         @if (session('success'))

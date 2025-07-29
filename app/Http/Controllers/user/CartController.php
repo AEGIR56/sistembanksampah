@@ -24,10 +24,12 @@ class CartController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
         $userId = auth()->id();
+        $totalPoints = $user->userPoints()->sum('points');
 
         $cart = session("cart.$userId", []);
-        return view('user.pointCart', compact('cart'));
+        return view('user.pointCart', compact('cart', 'totalPoints'));
     }
     public function add(Request $request)
     {

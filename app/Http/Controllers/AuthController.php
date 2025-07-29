@@ -33,7 +33,7 @@ class AuthController extends Controller
 
             if (!$user) {
                 Log::error('User not found', ['identifier' => $request->username]);
-                return back()->with('error', 'Invalid credentials.')->withInput();
+                return back()->with('error', 'Pengguna tidak ditemukan.')->withInput();
             }
 
             if (!Hash::check($request->password, $user->password)) {
@@ -43,7 +43,7 @@ class AuthController extends Controller
                     'entered' => $request->password,
                     'check' => Hash::check($request->password, $user->password),
                 ]);
-                return back()->with('error', 'Invalid credentials.')->withInput();
+                return back()->with('error', 'Password yang Anda masukkan salah.')->withInput();
             }
 
             Auth::login($user);

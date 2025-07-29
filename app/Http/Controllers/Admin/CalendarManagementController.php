@@ -13,32 +13,68 @@ class CalendarManagementController extends Controller
 {
     public function index()
     {
-        $calendarDays = CalendarDay::all();
+        // Ambil semua hari dan relasi staff
+        $calendarDays = CalendarDay::with('staff')->get();
+
+        // Ambil semua staff
         $staffs = User::where('role', 'staff')->get();
+
+        // Warna acak untuk tiap staff
+        $availableColors = [
+            '#F87171',
+            '#FBBF24',
+            '#34D399',
+            '#60A5FA',
+            '#A78BFA',
+            '#F472B6',
+            '#F97316',
+            '#2DD4BF',
+            '#4ADE80',
+            '#C084FC',
+            '#FB923C',
+            '#A3E635',
+        ];
+
+        $staffColors = [];
+        foreach ($staffs as $index => $staff) {
+            $staffColors[$staff->id] = $availableColors[$index % count($availableColors)];
+        }
 
         $today = now()->startOfDay();
 
-        $events = $calendarDays->map(function ($day) use ($today) {
+        // Bangun event kalender
+        $events = $calendarDays->map(function ($day) use ($today, $staffColors) {
             $date = \Carbon\Carbon::parse($day->date)->startOfDay();
 
-            // Jika hari sudah lewat dan status masih 'tersedia', ubah jadi 'expired'
+            // Tandai expired
             if ($date->lt($today) && $day->status === 'tersedia') {
                 $day->status = 'expired';
             }
 
+            $status = ucfirst($day->status);
+
+            $title = $day->staff
+                ? "Staff: {$day->staff->username} - {$status}"
+                : "{$status} - Tidak Ada Staff";
+
             return [
-                'title' => ucfirst($day->status),
+                'title' => $title,
                 'start' => $day->date,
-                'color' => match ($day->status) {
-                    'penuh' => 'red',
-                    'libur' => 'gray',
-                    'expired' => 'gray',
-                    default => 'green'
-                },
+                'color' => $day->staff
+                    ? $staffColors[$day->staff->id] ?? '#999'
+                    : match ($day->status) {
+                        'penuh', 'expired', 'libur' => 'gray',
+                        default => 'green',
+                    },
+                'extendedProps' => [
+                    'status' => $day->status,
+                    'staff_email' => $day->staff->email ?? '-',
+                ],
             ];
         });
 
 
+        // Pickup yang sudah selesai
         $pickups = Pickup::with(['user', 'report', 'wasteType'])
             ->where('status', 'pickup selesai')
             ->get();

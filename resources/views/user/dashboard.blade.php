@@ -51,8 +51,8 @@
         }
 
         /* .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        } */
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            } */
 
         .card:hover {
             /* transform: translateY(-5px); */
@@ -69,6 +69,11 @@
         }
     </style>
     <div class="container py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            </ol>
+        </nav>
         <h1 class="fw-bold mb-4">Dashboard</h1>
         {{-- Cards --}}
         <div class="row g-4">
