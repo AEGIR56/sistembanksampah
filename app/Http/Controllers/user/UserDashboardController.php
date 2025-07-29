@@ -25,7 +25,10 @@ class UserDashboardController extends Controller
         $exchange_points = PointShopTransaction::where('user_id', $userId)->sum('point_used');
 
         // total pickup
-        $total_pickup = Pickup::where('user_id', $userId)->count();
+        $total_pickup = Pickup::where('user_id', $userId)
+            ->where('status', 'selesai')
+            ->count();
+
 
         $total_waste_kg = ReportPickup::whereHas('pickup', function ($query) use ($userId) {
             $query->where('user_id', $userId);

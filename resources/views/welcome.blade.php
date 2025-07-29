@@ -111,10 +111,6 @@
                             <p class="mb-0 lead">Platform edukatif dan aksi nyata untuk pengelolaan sampah dan pelestarian
                                 lingkungan.</p>
                         </div>
-                        <div class="d-flex flex-row gap-2 justify-content-center">
-                            <a href="#aksi" class="btn btn-success">Gabung Aksi</a>
-                            <a href="#program" class="btn btn-outline-success">Lihat Program</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -305,23 +301,6 @@
                             lingkungan sehat, bersih, dan bernilai ekonomi untuk masyarakat.
                         </p>
                     </div>
-                    <div>
-                        <form class="row g-2 d-flex mx-lg-7" action="#" method="post" name="support-program-form"
-                            novalidate>
-                            <div class="col-md-9 col-12">
-                                <input type="email" id="supportEmail" class="form-control" name="EMAIL"
-                                    placeholder="Masukkan email Anda untuk bergabung" required />
-                            </div>
-                            <div class="col-md-3 col-12">
-                                <div class="d-grid">
-                                    <button class="btn btn-success" type="submit">Dukung Sekarang</button>
-                                </div>
-                            </div>
-                            <div style="position: absolute; left: -5000px" aria-hidden="true">
-                                <input class="antispam" type="text" name="b_fake_field" tabindex="-1" />
-                            </div>
-                        </form>
-                    </div>
                 </div>
             </div>
         </div>
@@ -347,13 +326,13 @@
                                 </div>
                                 <div class="collapse d-lg-block" id="collapseLandingService" data-bs-parent="#ft-links">
                                     <ul class="list-unstyled mb-0 py-3 py-lg-0">
-                                        <li class="mb-2"><a href="#"
+                                        <li class="mb-2"><a
                                                 class="text-decoration-none text-white">Pencatatan Setoran Sampah</a></li>
-                                        <li class="mb-2"><a href="#"
+                                        <li class="mb-2"><a
                                                 class="text-decoration-none text-white">Klasifikasi & Labelisasi</a></li>
-                                        <li class="mb-2"><a href="#"
+                                        <li class="mb-2"><a
                                                 class="text-decoration-none text-white">Manajemen Lokasi</a></li>
-                                        <li class="mb-2"><a href="#"
+                                        <li class="mb-2"><a
                                                 class="text-decoration-none text-white">Penjemputan Sampah</a></li>
                                     </ul>
                                 </div>
@@ -372,13 +351,13 @@
                             </div>
                             <div class="collapse d-lg-block" id="collapseLandingPerusahaan" data-bs-parent="#ft-links">
                                 <ul class="list-unstyled mb-0 py-3 py-lg-0">
-                                    <li class="mb-2"><a href="#"
+                                    <li class="mb-2"><a
                                             class="text-white text-decoration-none">Terintegrasi</a></li>
-                                    <li class="mb-2"><a href="#"
+                                    <li class="mb-2"><a
                                             class="text-white text-decoration-none">Transparan</a></li>
-                                    <li class="mb-2"><a href="#" class="text-white text-decoration-none">Aman</a>
+                                    <li class="mb-2"><a class="text-white text-decoration-none">Aman</a>
                                     </li>
-                                    <li class="mb-2"><a href="#"
+                                    <li class="mb-2"><a
                                             class="text-white text-decoration-none">Praktis</a></li>
                                 </ul>
                             </div>
