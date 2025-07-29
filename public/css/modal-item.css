@@ -1,0 +1,124 @@
+/* Modal */
+.modal-box {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 1.5rem;
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Table Detail */
+.modal-box table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.modal-box table td {
+    padding: 0.4rem 0.6rem;
+    vertical-align: top;
+}
+
+.modal-box table td:first-child {
+    font-weight: 600;
+    color: #333;
+    width: 30%;
+}
+
+.modal-box table td:last-child {
+    color: #555;
+}
+
+.modal-box table input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.4rem 0.6rem;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+.modal-box table input:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* Gambar */
+.modal-box img {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    max-width: 160px;
+    max-height: 160px;
+    object-fit: contain;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Tombol */
+.modal-box .btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.modal-box .btn:hover {
+    opacity: 0.9;
+}
+
+.modal-box .btn-edit {
+    background-color: #facc15; /* Yellow */
+    color: #000;
+}
+
+.modal-box .btn-delete {
+    background-color: #ef4444; /* Red */
+    color: #fff;
+}
+
+.modal-box .btn-close {
+    background-color: #e5e7eb; /* Gray */
+    color: #000;
+}
+
+.modal-box .btn-save {
+    background-color: #16a34a; /* Green */
+    color: #fff;
+}
+
+/* Tombol Batal/Simpan form edit */
+.modal-box .form-buttons {
+    text-align: right;
+    margin-top: 0.5rem;
+}
+
+.modal-box .form-buttons button {
+    margin-left: 0.5rem;
+}
+
+.modal-box .flex-1 {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+/* === Atur layout kiri-kanan tanpa Tailwind === */
+.modal-flex-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem; /* jarak antar gambar dan konten */
+}
+
+/* Gambar tetap fix ukuran */
+.modal-image-container {
+    flex-shrink: 0;
+    width: 12rem; /* 48 (x 0.25rem) */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Konten detail dan form */
+.modal-content {
+    flex: 1;
+}

@@ -1,0 +1,75 @@
+#editModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; /* lebih besar */
+    max-width: 90%;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    z-index: 9999;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: none;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+#editModal h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+#editModal label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #444;
+    font-weight: 500;
+}
+
+#editModal select,
+#editModal input[type="text"] {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#editModal button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    font-size: 13px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#editModal button[type="submit"] {
+    background-color: #0f766e;
+    color: #fff;
+}
+
+#editModal button[type="button"] {
+    background-color: #ccc;
+    color: #333;
+}
+
+#editModal button[type="button"][style*="red"] {
+    background-color: #e3342f;
+    color: #fff;
+}
+
+#modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 9998;
+    display: none;
+}

@@ -1,0 +1,93 @@
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.dashboard-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    font-size: 14px;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.dashboard-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.dashboard-table .even-row {
+    background-color: #fafafa;
+}
+
+.dashboard-table .no-data {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+.staff-pickup-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.pickup-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.pickup-table th,
+.pickup-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.pickup-table th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+}
+
+.pickup-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.report-btn {
+    background-color: #3490dc;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+}
