@@ -32,7 +32,7 @@
             <div class="row g-3">
                 @forelse($items as $item)
                     @php $img = $item->images->first(); @endphp
-                    <div class="col-md-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="col-md-3">
                         <div class="card border-0 h-100 shadow-sm cursor-pointer hover-scale"
                             onclick='openItemModal(
                     {{ $item->id }},

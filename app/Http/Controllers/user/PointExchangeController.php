@@ -16,11 +16,12 @@ class PointExchangeController extends Controller
      */
     public function index()
     {
-        $items = ShopItem::with('images')->get();
+        $items = ShopItem::with('images')->paginate(8);
         $user = Auth::user();
         $totalPoints = $user->userPoints()->sum('points');
-
-        return view('user.pointexchange', compact('items', 'user', 'totalPoints'));
+        $cart = session('cart', []);
+        $cartCount = array_sum(array_column($cart, 'qty'));
+        return view('user.pointexchange', compact('items', 'user', 'totalPoints','cartCount'));
     }
 
     /**

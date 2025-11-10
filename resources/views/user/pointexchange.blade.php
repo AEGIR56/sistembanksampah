@@ -1,17 +1,6 @@
 @extends('layouts.user')
 
 @section('content')
-    @php
-        $cart = session('cart', []);
-        $cartCount = array_sum(array_column($cart, 'qty'));
-
-        $items = $items->map(function ($item) {
-            $img = $item->images->first();
-            $item->thumbnail = $img ? asset('storage/' . $img->image_path) : asset('images/default.jpg');
-            return $item;
-        });
-    @endphp
-
     <style>
         /* Basic modal style */
         .modal {
@@ -93,7 +82,8 @@
     <div class="container py-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}" class="text-success text-decoration-none">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}"
+                        class="text-success text-decoration-none">Dashboard</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Toko</li>
             </ol>
         </nav>
@@ -117,19 +107,11 @@
         @endif
 
         <div class="card p-3 shadow border-0 mb-4">
-
             <div class="row g-3">
                 @forelse($items as $item)
                     @php $img = $item->images->first(); @endphp
-                    <div class="col-md-3" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                        <div class="card border-0 h-100 shadow-sm cursor-pointer hover-scale"
-                            onclick="showItemDetail(
-                            '{{ $item->id }}',
-                            '{{ $item->name }}',
-                            '{{ $img ? asset('storage/' . $img->image_path) : asset('images/default.jpg') }}',
-                            '{{ $item->stock }}',
-                            '{{ $item->point_cost }}'
-                        )">
+                    <div class="col-md-3" >
+                        <div class="card border-0 h-100 shadow-sm cursor-pointer hover-scale">
                             <div style="aspect-ratio: 1 / 1; overflow: hidden;">
                                 <img src="{{ $img ? asset('storage/' . $img->image_path) : asset('images/default.jpg') }}"
                                     class="card-img-top w-100 h-100 object-fit-cover" alt="{{ $item->name }}">
@@ -158,9 +140,16 @@
                                 <!-- Tombol -->
                                 <div class="d-grid">
                                     <button class="btn btn-success btn-sm"
-                                        onclick="event.stopPropagation(); showItemDetail({{ $item->id }})">
+                                        onclick='event.stopPropagation(); showItemDetail(
+                                            @json($item->id),
+                                            @json($item->name),
+                                            @json($img ? asset('storage/' . $img->image_path) : asset('images/default.jpg')),
+                                            @json($item->stock),
+                                            @json($item->point_cost)
+                                        )'>
                                         <i class="bi bi-exclamation-circle"></i> Lihat Detail Produk
                                     </button>
+
                                 </div>
                             </div>
                         </div>
@@ -172,6 +161,50 @@
                         </div>
                     </div>
                 @endforelse
+            </div>
+
+            <div class="card-footer border-0">
+                <div class="align-items-center">
+                    <!-- Pagination -->
+                    @if ($items->hasPages())
+                        <div class="mt-4 d-flex justify-content-center">
+                            <nav>
+                                <ul class="pagination">
+                                    {{-- Previous Page Link --}}
+                                    @if ($items->onFirstPage())
+                                        <li class="page-item disabled"><span class="page-link text-success">«</span></li>
+                                    @else
+                                        <li class="page-item"><a class="page-link text-success"
+                                                href="{{ $items->previousPageUrl() }}" rel="prev">«</a></li>
+                                    @endif
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($items->links()->elements[0] as $page => $url)
+                                        @if ($page == $items->currentPage())
+                                            <li class="page-item active">
+                                                <span
+                                                    class="page-link bg-success text-white border-success">{{ $page }}</span>
+                                            </li>
+                                        @else
+                                            <li class="page-item">
+                                                <a class="page-link text-success"
+                                                    href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @endif
+                                    @endforeach
+
+                                    {{-- Next Page Link --}}
+                                    @if ($items->hasMorePages())
+                                        <li class="page-item"><a class="page-link text-success"
+                                                href="{{ $items->nextPageUrl() }}" rel="next">»</a></li>
+                                    @else
+                                        <li class="page-item disabled"><span class="page-link">»</span></li>
+                                    @endif
+                                </ul>
+                            </nav>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
@@ -189,24 +222,20 @@
         });
     </script>
     <script>
-        const listItems = @json($items);
+        const listItems = @json($items); // ← isi dari controller
 
-        function showItemDetail(itemId) {
-            // Ambil data item dari listItem (bisa kamu definisikan dari Laravel atau fetch dari server)
-            const item = listItems.find(i => i.id === itemId);
-            if (!item) return;
-
-            document.getElementById('detailItemId').value = item.id;
-            document.getElementById('detailName').innerText = item.name;
-            document.getElementById('detailStock').innerText = item.stock;
-            document.getElementById('detailPrice').value = item.point_cost;
+        function showItemDetail(id, name, img, stock, pointCost) {
+            document.getElementById('detailItemId').value = id;
+            document.getElementById('detailName').innerText = name;
+            document.getElementById('detailStock').innerText = stock;
+            document.getElementById('detailPrice').value = pointCost;
             document.getElementById('detailQty').value = 1;
-            document.getElementById('detailImage').src = item.thumbnail ?? '/images/default.png';
+            document.getElementById('detailImage').src = img || '/images/default.png';
 
             updateSubtotal();
-
             document.getElementById('itemDetailModal').style.display = 'block';
         }
+
 
         function closeModal() {
             document.getElementById('itemDetailModal').style.display = 'none';

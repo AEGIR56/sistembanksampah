@@ -12,9 +12,12 @@
             <div class="modal-body">
                 <!-- Thumbnail -->
                 <div class="text-center mb-3">
-                    <img id="detailImage" src="" alt="Item Image" class="img-fluid rounded"
-                        style="max-height: 200px;">
-                </div>
+                    <div class="mx-auto"
+                        style="aspect-ratio: 1 / 1; width: 100%; max-width: 300px; overflow: hidden; border-radius: 0.5rem;">
+                        <img id="detailImage" src="" alt="Item Image"
+                            class="img-fluid w-100 h-100 object-fit-cover">
+                    </div>
+                </div>
 
                 <!-- Stock -->
                 <div class="mb-2 d-flex justify-content-between">
